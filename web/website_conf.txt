@@ -1,0 +1,21 @@
+# /etc/apache2/sites-enabled/website.tld
+
+<VirtualHost *:443>
+ServerName http://www.website.tld
+ServerAlias website.tld m.website.tld
+
+Header always set Strict-Transport-Security "max-age=31536000"
+
+DocumentRoot /var/www/website.tld
+DirectoryIndex index.html index.php
+
+<Directory "/var/www/website.tld">
+allow from all
+Options +Indexes
+</Directory>
+
+SSLEngine on
+SSLCertificateKeyFile /etc/apache2/ssl/www.website.tld/website.tld.key
+SSLCertificateFile /etc/apache2/ssl/www.website.tld/www_website.tld.crt
+SSLCertificateChainFile /etc/apache2/ssl/www.website.tld/www_website.tld.ca-bundle
+</VirtualHost>
