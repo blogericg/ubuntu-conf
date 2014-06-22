@@ -4,6 +4,7 @@
 FW_ADMIN="192.168.2.100"
 FW_CONF="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/net/firewall.conf"
 FW_POLICY="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/net/firewall"
+SSH_GRPS="sudo"
 
 RINPUT=`openssl rand -hex 3`
 CHANGEME=''		# Add something just to verify that you actually glanced the code
@@ -19,7 +20,7 @@ fi
 
 if ! [[ `id | grep sudo` || `id -u` = '0' ]]; 
 	then
-		echo "Not root or in the sudo group. Exiting." 
+		echo "Not root and not in the sudo group. Exiting." 
 		echo
 		exit
 fi
@@ -94,7 +95,7 @@ if [[ `$SUDO dmidecode -q --type system | grep -i vmware` ]];
 fi
 
 echo "[X] /etc/ssh/sshd_config"
-$SUDO bash -c "echo $'\n'## Groups allowed to connect$'\n'AllowGroups sudo >> /etc/ssh/sshd_config"
+$SUDO bash -c "echo $'\n'## Groups allowed to connect$'\n'AllowGroups $SSH_GRPS >> /etc/ssh/sshd_config"
 $SUDO /etc/init.d/ssh restart
 
 echo "[X] Default shell" 
