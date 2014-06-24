@@ -1,4 +1,4 @@
 ubuntu-conf
 ===========
 
-Miscellaneous Ubuntu configuration tidbits 
+Miscellaneous Ubuntu scripts and files, mostly security related.
