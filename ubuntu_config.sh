@@ -2,22 +2,25 @@
 # konstruktoid.net
 
 FW_ADMIN="192.168.2.100"
+SSH_GRPS="sudo"
 FW_CONF="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/net/firewall.conf"
 FW_POLICY="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/net/firewall"
-SSH_GRPS="sudo"
+SYSCTL_CONF="# Unused. Will be fixed."
 VERBOSE="N"
 CHANGEME=""		# Add something just to verify that you actually glanced the code
 
-RINPUT=`openssl rand -hex 3`
-
 clear
+
+RINPUT=`openssl rand -hex 3`
 
 if [[ $VERBOSE == "Y" ]];
 	then
 		APTFLAGS="--assume-yes"
 	else
-		APTFLAGS="-qq --assume-yes"
+		APTFLAGS="--quiet=2 --assume-yes"
 fi
+
+APT="aptitude $APTFLAGS"
 
 if [[ $CHANGEME == "" ]];
 	then
@@ -59,6 +62,14 @@ if ! [[ "$INPUT" == "$RINPUT" ]];
 		echo "Let it begin."
 fi
 
+echo "[X] Installing firewall."
+$SUDO bash -c "curl -3 -s $FW_CONF > /etc/init/firewall.conf"
+$SUDO bash -c "curl -3 -s $FW_POLICY > /etc/init.d/firewall"
+$SUDO update-rc.d firewall defaults 2>/dev/null 
+$SUDO sed -i "s/ADMIN=\"127.0.0.1\"/ADMIN=\"$FW_ADMIN\"/" /etc/init.d/firewall
+$SUDO chmod u+x /etc/init.d/firewall
+$SUDO bash -c "/etc/init.d/firewall"
+
 if ! [[ `grep "/tmp" /etc/fstab` ]];
 	then
 		echo "[X] /tmp settings."
@@ -68,18 +79,10 @@ if ! [[ `grep "/tmp" /etc/fstab` ]];
 fi
 
 echo "[X] Updating the package index files from their sources."
-$SUDO apt-get $APTFLAGS update
+$SUDO $APT update
 
 echo "[X] Upgrading installed packages."
-$SUDO apt-get $APTFLAGS upgrade 
-
-echo "[X] Installing firewall."
-$SUDO bash -c "curl -3 -s $FW_CONF > /etc/init/firewall.conf"
-$SUDO bash -c "curl -3 -s $FW_POLICY > /etc/init.d/firewall"
-$SUDO update-rc.d firewall defaults 2>/dev/null 
-$SUDO sed -i "s/ADMIN=\"127.0.0.1\"/ADMIN=\"$FW_ADMIN\"/" /etc/init.d/firewall
-$SUDO chmod u+x /etc/init.d/firewall
-$SUDO bash -c "/etc/init.d/firewall"
+$SUDO $APT upgrade 
 
 echo "[X] /etc/hosts.*"
 $SUDO bash -c "echo sshd : ALL : ALLOW$'\n'ALL: LOCAL, 127.0.0.1 > /etc/hosts.allow"
@@ -90,10 +93,11 @@ $SUDO sed -i 's/^LOG_OK_LOGINS.*/LOG_OK_LOGINS\t\tyes/' /etc/login.defs
 $SUDO sed -i 's/^UMASK.*/UMASK\t\t077/' /etc/login.defs
 $SUDO sed -i 's/^# SHA_CRYPT_MAX_ROUNDS.*/SHA_CRYPT_MAX_ROUNDS\t\t10000/' /etc/login.defs
 
-if ! [[ `grep "fs.suid_dumpable = 0" /etc/security/limits.conf` ]];
-	then
-		echo "[X] /etc/sysctl.conf"
-		$SUDO bash -c "echo fs.suid_dumpable = 0 >> /etc/sysctl.conf"
+echo "[X] /etc/sysctl.conf"
+#$SUDO bash -c "curl -3 -s $SYSCTL_CONF > /etc/sysctl.conf"
+$SUDO bash -c "echo fs.suid_dumpable = 0 >> /etc/sysctl.conf"
+$SUDO sysctl -p --quiet 
+
 fi
 
 if ! [[ `grep "soft nproc 100" /etc/security/limits.conf` ]];
@@ -103,32 +107,49 @@ if ! [[ `grep "soft nproc 100" /etc/security/limits.conf` ]];
 		$SUDO bash -c "echo $'\n'* hard core 0$'\n'* soft nproc 100$'\n'* hard nproc 150$'\n\n'# End of file >> /etc/security/limits.conf"
 fi
 
-echo "[X] Installing base packages"
+echo "[X] Default shell" 
+$SUDO sed -i 's/DSHELL=.*/DSHELL=\/bin\/false/' /etc/adduser.conf 
+$SUDO sed -i 's/SHELL=.*/SHELL=\/bin\/false/' /etc/default/useradd
+
+echo "[X] Root access"
+$SUDO sed -i 's/^#+ : root : 127.0.0.1/+ : root : 127.0.0.1/' /etc/security/access.conf
+$SUDO bash -c "echo console > /etc/securetty"
+
+echo "[X] Installing base packages."
 if [[ `$SUDO dmidecode -q --type system | grep -i vmware` ]]; 
 	then
 		VMTOOLS="open-vm-tools"
 fi
 
-$SUDO apt-get $APTFLAGS install libpam-tmpdir libpam-cracklib apparmor-profiles ntp openssh-server $VMTOOLS
+$SUDO $APT install libpam-tmpdir libpam-cracklib apparmor-profiles ntp openssh-server $VMTOOLS
 
-if ! [[ `grep "AllowGroups $SSH_GRPS"` ]];
+echo "[X] /etc/ssh/sshd_config"
+if ! [[ `$SUDO grep "AllowGroups" /etc/ssh/sshd_config` ]];
 	then
-		echo "[X] /etc/ssh/sshd_config"
 		$SUDO bash -c "echo $'\n'## Groups allowed to connect$'\n'AllowGroups $SSH_GRPS >> /etc/ssh/sshd_config"
-		$SUDO /etc/init.d/ssh restart
 fi
 
-echo "[X] Default shell" 
-$SUDO sed -i 's/DSHELL=.*/DSHELL=\/bin\/false/' /etc/adduser.conf 
-$SUDO sed -i 's/SHELL=.*/SHELL=\/bin\/false/' /etc/default/useradd
+$SUDO sed -i 's/^LoginGraceTime 120/LoginGraceTime 20/' /etc/ssh/sshd_config
+$SUDO /etc/init.d/ssh restart
 
 echo "[X] Password requirements"
 $SUDO sed -i 's/pam_cracklib.so.*/pam_cracklib.so retry=3 minlen=14/' /etc/pam.d/common-password
 $SUDO sed -i 's/try_first_pass sha512.*/try_first_pass sha512 remember=5/' /etc/pam.d/common-password
 
+echo "[X] Cron"
+$SUDO bash -c "echo root > /etc/cron.allow"
+
 echo "[X] Remove suid bits"
-$SUDO chmod -s /bin/fusermount /bin/mount /bin/su /bin/umount /usr/bin/bsd-write /usr/bin/chage /usr/bin/chfn /usr/bin/chsh /usr/bin/mlocate /usr/bin/mtr /usr/bin/newgrp /usr/bin/traceroute6.iputils /usr/bin/wall 
+$SUDO chmod -s /bin/fusermount /bin/mount /bin/ping /bin/ping6 /bin/su /bin/umount /usr/bin/bsd-write /usr/bin/chage /usr/bin/chfn /usr/bin/chsh /usr/bin/mlocate /usr/bin/mtr /usr/bin/newgrp /usr/bin/pkexec /usr/bin/traceroute6.iputils /usr/bin/wall /usr/sbin/pppd
 
 echo "[X] Cleaning."
-$SUDO apt-get $APTFLAGS clean
-$SUDO apt-get $APTFLAGS autoremove
+$SUDO $APT clean
+$SUDO $APT autoclean
+
+echo
+
+if [ -f /var/run/reboot-required ]; then
+        cat /var/run/reboot-required
+fi
+
+echo
