@@ -5,7 +5,7 @@ FW_ADMIN="192.168.2.100"
 SSH_GRPS="sudo"
 FW_CONF="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/net/firewall.conf"
 FW_POLICY="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/net/firewall"
-SYSCTL_CONF="# Unused. Will be fixed."
+SYSCTL_CONF="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/misc/sysctl.conf"
 VERBOSE="N"
 CHANGEME=""		# Add something just to verify that you actually glanced the code
 
