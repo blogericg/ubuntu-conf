@@ -91,6 +91,9 @@ $SUDO bash -c "echo ALL: PARANOID > /etc/hosts.deny"
 echo "[X] /etc/login.defs"
 $SUDO sed -i 's/^LOG_OK_LOGINS.*/LOG_OK_LOGINS\t\tyes/' /etc/login.defs
 $SUDO sed -i 's/^UMASK.*/UMASK\t\t077/' /etc/login.defs
+$SUDO sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS\t\t30/' /etc/login.defs
+$SUDO sed -i 's/DEFAULT_HOME.*/DEFAULT_HOME no/' /etc/login.defs
+$SUDO sed -i 's/USERGROUPS_ENAB.*/USERGROUPS_ENAB no/' /etc/login.defs
 $SUDO sed -i 's/^# SHA_CRYPT_MAX_ROUNDS.*/SHA_CRYPT_MAX_ROUNDS\t\t10000/' /etc/login.defs
 
 echo "[X] /etc/sysctl.conf"
@@ -133,7 +136,7 @@ echo "[X] Password requirements"
 $SUDO sed -i 's/pam_cracklib.so.*/pam_cracklib.so retry=3 minlen=14/' /etc/pam.d/common-password
 $SUDO sed -i 's/try_first_pass sha512.*/try_first_pass sha512 remember=5/' /etc/pam.d/common-password
 
-echo "[X] Cron and at "
+echo "[X] Cron and at"
 $SUDO bash -c "echo root > /etc/cron.allow"
 $SUDO bash -c "echo root > /etc/at.allow"
 
