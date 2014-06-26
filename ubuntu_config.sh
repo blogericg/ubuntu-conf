@@ -94,11 +94,8 @@ $SUDO sed -i 's/^UMASK.*/UMASK\t\t077/' /etc/login.defs
 $SUDO sed -i 's/^# SHA_CRYPT_MAX_ROUNDS.*/SHA_CRYPT_MAX_ROUNDS\t\t10000/' /etc/login.defs
 
 echo "[X] /etc/sysctl.conf"
-#$SUDO bash -c "curl -3 -s $SYSCTL_CONF > /etc/sysctl.conf"
-$SUDO bash -c "echo fs.suid_dumpable = 0 >> /etc/sysctl.conf"
-$SUDO sysctl -p --quiet 
-
-fi
+$SUDO bash -c "curl -3 -s $SYSCTL_CONF > /etc/sysctl.conf"
+$SUDO service procps start
 
 if ! [[ `grep "soft nproc 100" /etc/security/limits.conf` ]];
 	then
@@ -136,8 +133,9 @@ echo "[X] Password requirements"
 $SUDO sed -i 's/pam_cracklib.so.*/pam_cracklib.so retry=3 minlen=14/' /etc/pam.d/common-password
 $SUDO sed -i 's/try_first_pass sha512.*/try_first_pass sha512 remember=5/' /etc/pam.d/common-password
 
-echo "[X] Cron"
+echo "[X] Cron and at "
 $SUDO bash -c "echo root > /etc/cron.allow"
+$SUDO bash -c "echo root > /etc/at.allow"
 
 echo "[X] Remove suid bits"
 $SUDO chmod -s /bin/fusermount /bin/mount /bin/ping /bin/ping6 /bin/su /bin/umount /usr/bin/bsd-write /usr/bin/chage /usr/bin/chfn /usr/bin/chsh /usr/bin/mlocate /usr/bin/mtr /usr/bin/newgrp /usr/bin/pkexec /usr/bin/traceroute6.iputils /usr/bin/wall /usr/sbin/pppd
