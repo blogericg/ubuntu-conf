@@ -146,6 +146,7 @@ $SUDO chmod -s /bin/fusermount /bin/mount /bin/ping /bin/ping6 /bin/su /bin/umou
 echo "[X] Cleaning."
 $SUDO $APT clean
 $SUDO $APT autoclean
+$SUDO apt-get -qq autoremove
 
 echo
 
