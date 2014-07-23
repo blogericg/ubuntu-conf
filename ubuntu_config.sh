@@ -142,6 +142,12 @@ echo "[X] Cron and at"
 $SUDO bash -c "echo root > /etc/cron.allow"
 $SUDO bash -c "echo root > /etc/at.allow"
 
+echo "[X] Blacklisting kernel modules"
+$SUDO bash -c "echo blacklist dccp >> /etc/modprobe.d/blacklist.conf"
+$SUDO bash -c "echo blacklist sctp >> /etc/modprobe.d/blacklist.conf"
+$SUDO bash -c "echo blacklist rds >> /etc/modprobe.d/blacklist.conf"
+$SUDO bash -c "echo blacklist tipc >> /etc/modprobe.d/blacklist.conf"
+
 echo "[X] Remove suid bits"
 for p in /bin/fusermount /bin/mount /bin/ping /bin/ping6 /bin/su /bin/umount /usr/bin/bsd-write /usr/bin/chage /usr/bin/chfn /usr/bin/chsh /usr/bin/mlocate /usr/bin/mtr /usr/bin/newgrp /usr/bin/pkexec /usr/bin/traceroute6.iputils /usr/bin/wall /usr/sbin/pppd;
 do 
