@@ -106,9 +106,10 @@ $SUDO sed -i 's/^# End of file*//' /etc/security/limits.conf
 $SUDO bash -c "echo * hard maxlogins 10 >> /etc/security/limits.conf"
 $SUDO bash -c "echo * hard core 0$'\n'* soft nproc 100$'\n'* hard nproc 150$'\n\n'# End of file >> /etc/security/limits.conf"
 
-echo "[X] Default shell" 
+echo "[X] Adduser / Useradd" 
 $SUDO sed -i 's/DSHELL=.*/DSHELL=\/bin\/false/' /etc/adduser.conf 
 $SUDO sed -i 's/SHELL=.*/SHELL=\/bin\/false/' /etc/default/useradd
+$SUDO sed -i 's/^# INACTIVE=.*/INACTIVE=35' /etc/default/useradd
 
 echo "[X] Root access"
 $SUDO sed -i 's/^#+ : root : 127.0.0.1/+ : root : 127.0.0.1/' /etc/security/access.conf
