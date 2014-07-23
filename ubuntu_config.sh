@@ -125,12 +125,13 @@ fi
 $SUDO $APT install aide auditd libpam-tmpdir libpam-cracklib apparmor-profiles ntp openssh-server haveged $VM
 
 echo "[X] /etc/ssh/sshd_config"
-if ! [[ `$SUDO grep "AllowGroups" /etc/ssh/sshd_config` ]];
-	then
-		$SUDO bash -c "echo $'\n'## Groups allowed to connect$'\n'AllowGroups $SSH_GRPS >> /etc/ssh/sshd_config"
-fi
-
+$SUDO bash -c "echo $'\n'## Groups allowed to connect$'\n'AllowGroups $SSH_GRPS >> /etc/ssh/sshd_config"
 $SUDO sed -i 's/^LoginGraceTime 120/LoginGraceTime 20/' /etc/ssh/sshd_config
+$SUDO sed -i 's/^PermitRootLogin without-password/PermitRootLogin no/' /etc/ssh/sshd_config
+$SUDO bash -c "echo ClientAliveInterval 900 >> /etc/ssh/sshd_config"
+$SUDO bash -c "echo ClientAliveCountMax 0 >> /etc/ssh/sshd_config"
+$SUDO bash -c "echo PermitUserEnvironment no >> /etc/ssh/sshd_config"
+$SUDO bash -c "echo Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc >> /etc/ssh/sshd_config"
 $SUDO /etc/init.d/ssh restart
 
 echo "[X] Passwords and authentication"
