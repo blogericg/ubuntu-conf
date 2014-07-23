@@ -143,6 +143,9 @@ echo "[X] Cron and at"
 $SUDO bash -c "echo root > /etc/cron.allow"
 $SUDO bash -c "echo root > /etc/at.allow"
 
+echo "[X] Ctrl-alt-delete"
+$SUDO sed -i 's/^exec.*/exec /usr/bin/logger -p security.info "Ctrl-Alt-Delete pressed"' /etc/init/control-alt-delete.conf
+
 echo "[X] Blacklisting kernel modules"
 $SUDO bash -c "echo blacklist dccp >> /etc/modprobe.d/blacklist.conf"
 $SUDO bash -c "echo blacklist sctp >> /etc/modprobe.d/blacklist.conf"
