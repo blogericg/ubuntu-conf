@@ -118,10 +118,10 @@ $SUDO bash -c "echo console > /etc/securetty"
 echo "[X] Installing base packages."
 if [[ `$SUDO dmidecode -q --type system | grep -i vmware` ]]; 
 	then
-		VMTOOLS="open-vm-tools"
+		VM="open-vm-tools"
 fi
 
-$SUDO $APT install libpam-tmpdir libpam-cracklib apparmor-profiles ntp openssh-server $VMTOOLS
+$SUDO $APT install libpam-tmpdir libpam-cracklib apparmor-profiles ntp openssh-server haveged $VM
 
 echo "[X] /etc/ssh/sshd_config"
 if ! [[ `$SUDO grep "AllowGroups" /etc/ssh/sshd_config` ]];
