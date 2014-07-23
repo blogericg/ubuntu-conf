@@ -132,9 +132,10 @@ fi
 $SUDO sed -i 's/^LoginGraceTime 120/LoginGraceTime 20/' /etc/ssh/sshd_config
 $SUDO /etc/init.d/ssh restart
 
-echo "[X] Password requirements"
+echo "[X] Passwords and authentication"
 $SUDO sed -i 's/pam_cracklib.so.*/pam_cracklib.so retry=3 minlen=14/' /etc/pam.d/common-password
 $SUDO sed -i 's/try_first_pass sha512.*/try_first_pass sha512 remember=5/' /etc/pam.d/common-password
+$SUDO sed -i 's/nullok_secure//' /etc/pam.d/common-auth
 
 echo "[X] Cron and at"
 $SUDO bash -c "echo root > /etc/cron.allow"
