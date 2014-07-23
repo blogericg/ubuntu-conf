@@ -134,7 +134,7 @@ $SUDO sed -i 's/^LoginGraceTime 120/LoginGraceTime 20/' /etc/ssh/sshd_config
 $SUDO /etc/init.d/ssh restart
 
 echo "[X] Passwords and authentication"
-$SUDO sed -i 's/pam_cracklib.so.*/pam_cracklib.so retry=3 minlen=14/' /etc/pam.d/common-password
+$SUDO sed -i 's/^password[\t].*.pam_cracklib.*/password\trequired\t\t\tpam_cracklib.so retry=3 minlen=14 dcredit=-1 ucredit=-1 ocredit=-1 lcredit=-1 difok=4/' /etc/pam.d/common-password
 $SUDO sed -i 's/try_first_pass sha512.*/try_first_pass sha512 remember=5/' /etc/pam.d/common-password
 $SUDO sed -i 's/nullok_secure//' /etc/pam.d/common-auth
 
