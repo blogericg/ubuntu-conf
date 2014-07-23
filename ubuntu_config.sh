@@ -101,12 +101,10 @@ echo "[X] /etc/sysctl.conf"
 $SUDO bash -c "curl -3 -s $SYSCTL_CONF > /etc/sysctl.conf"
 $SUDO service procps start
 
-if ! [[ `grep "soft nproc 100" /etc/security/limits.conf` ]];
-	then
-		echo "[X] /etc/security/limits.conf"
-		$SUDO sed -i 's/^# End of file*//' /etc/security/limits.conf
-		$SUDO bash -c "echo $'\n'* hard core 0$'\n'* soft nproc 100$'\n'* hard nproc 150$'\n\n'# End of file >> /etc/security/limits.conf"
-fi
+echo "[X] /etc/security/limits.conf"
+$SUDO sed -i 's/^# End of file*//' /etc/security/limits.conf
+$SUDO bash -c "echo * hard maxlogins 10 >> /etc/security/limits.conf"
+$SUDO bash -c "echo * hard core 0$'\n'* soft nproc 100$'\n'* hard nproc 150$'\n\n'# End of file >> /etc/security/limits.conf"
 
 echo "[X] Default shell" 
 $SUDO sed -i 's/DSHELL=.*/DSHELL=\/bin\/false/' /etc/adduser.conf 
