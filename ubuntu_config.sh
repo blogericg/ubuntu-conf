@@ -122,7 +122,7 @@ if [[ `$SUDO dmidecode -q --type system | grep -i vmware` ]];
 		VM="open-vm-tools"
 fi
 
-$SUDO $APT install aide auditd libpam-tmpdir libpam-cracklib apparmor-profiles ntp openssh-server haveged $VM
+$SUDO $APT install aide auditd libpam-tmpdir libpam-cracklib apparmor-profiles ntp openssh-server postfix haveged $VM
 
 echo "[X] /etc/ssh/sshd_config"
 $SUDO bash -c "echo $'\n'## Groups allowed to connect$'\n'AllowGroups $SSH_GRPS >> /etc/ssh/sshd_config"
