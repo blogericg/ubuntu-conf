@@ -91,6 +91,7 @@ $SUDO bash -c "echo ALL: PARANOID > /etc/hosts.deny"
 echo "[X] /etc/login.defs"
 $SUDO sed -i 's/^LOG_OK_LOGINS.*/LOG_OK_LOGINS\t\tyes/' /etc/login.defs
 $SUDO sed -i 's/^UMASK.*/UMASK\t\t077/' /etc/login.defs
+$SUDO sed -i 's/^PASS_MIN_DAYS.*/PASS_MIN_DAYS\t\t1/' /etc/login.defs
 $SUDO sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS\t\t30/' /etc/login.defs
 $SUDO sed -i 's/DEFAULT_HOME.*/DEFAULT_HOME no/' /etc/login.defs
 $SUDO sed -i 's/USERGROUPS_ENAB.*/USERGROUPS_ENAB no/' /etc/login.defs
