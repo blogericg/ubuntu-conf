@@ -121,6 +121,8 @@ if [[ `$SUDO dmidecode -q --type system | grep -i vmware` ]];
 		VM="open-vm-tools"
 fi
 
+$SUDO debconf-set-selections <<< "postfix postfix/mailname string `hostname -f`"
+$SUDO debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
 $SUDO $APT install aide auditd libpam-tmpdir libpam-cracklib apparmor-profiles ntp openssh-server postfix haveged $VM
 
 echo "[X] /etc/ssh/sshd_config"
@@ -143,9 +145,10 @@ $SUDO bash -c "echo root > /etc/cron.allow"
 $SUDO bash -c "echo root > /etc/at.allow"
 
 echo "[X] Ctrl-alt-delete"
-$SUDO sed -i 's/^exec.*/exec /usr/bin/logger -p security.info "Ctrl-Alt-Delete pressed"' /etc/init/control-alt-delete.conf
+$SUDO sed -i 's/^exec.*/exec \/usr\/bin\/logger -p security.info \"Ctrl-Alt-Delete pressed\"/' /etc/init/control-alt-delete.conf
 
 echo "[X] Blacklisting kernel modules"
+$SUDO bash -c "echo >> /etc/modprobe.d/blacklist.conf"
 $SUDO bash -c "echo blacklist dccp >> /etc/modprobe.d/blacklist.conf"
 $SUDO bash -c "echo blacklist sctp >> /etc/modprobe.d/blacklist.conf"
 $SUDO bash -c "echo blacklist rds >> /etc/modprobe.d/blacklist.conf"
@@ -157,11 +160,11 @@ $SUDO bash -c "echo blacklist usb-storage >> /etc/modprobe.d/blacklist.conf"
 echo "[X] Remove suid bits"
 for p in /bin/fusermount /bin/mount /bin/ping /bin/ping6 /bin/su /bin/umount /usr/bin/bsd-write /usr/bin/chage /usr/bin/chfn /usr/bin/chsh /usr/bin/mlocate /usr/bin/mtr /usr/bin/newgrp /usr/bin/pkexec /usr/bin/traceroute6.iputils /usr/bin/wall /usr/sbin/pppd;
 do 
-        oct=`stat -c "%a" $p |sed 's/^4/0/'`
-        ug=`stat -c "%U %G" $p`
-        $SUDO dpkg-statoverride --remove $p
-        $SUDO dpkg-statoverride --add $ug $oct $p
-        $SUDO chmod -s $p
+	oct=`stat -c "%a" $p |sed 's/^4/0/'`
+	ug=`stat -c "%U %G" $p`
+	$SUDO dpkg-statoverride --remove $p 2> /dev/null
+	$SUDO dpkg-statoverride --add $ug $oct $p 2> /dev/null
+	$SUDO chmod -s $p
 done
 
 echo "[X] Cleaning."
