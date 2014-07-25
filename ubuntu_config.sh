@@ -140,8 +140,8 @@ if [[ `$SUDO dmidecode -q --type system | grep -i vmware` ]];
 		VM="open-vm-tools"
 fi
 
-$SUDO debconf-set-selections <<< "postfix postfix/mailname string `hostname -f`"
-$SUDO debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
+$SUDO bash -c "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
+$SUDO bash -c "postfix postfix/mailname string `hostname -f`" | debconf-set-selections
 
 $SUDO $APT install aide apparmor-profiles auditd haveged libpam-cracklib libpam-tmpdir ntp openssh-server postfix $VM
 
