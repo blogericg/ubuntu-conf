@@ -1,5 +1,13 @@
 #!/bin/bash
 # konstruktoid.net
+#
+# Documentation: 
+# Red Hat 6 STIG - Version 1 Release 4
+# Guide to the Secure Configuration of Red Hat Enterprise Linux 5
+# CIS Ubuntu 12.04 LTS Server Benchmark v1.0.0
+# https://wiki.ubuntu.com/Security/Features
+# https://help.ubuntu.com/community/StricterDefaults
+#
 
 FW_ADMIN="192.168.2.100"
 SSH_GRPS="sudo"
