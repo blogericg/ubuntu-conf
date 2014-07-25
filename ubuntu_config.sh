@@ -126,7 +126,7 @@ $SUDO bash -c "echo * hard core 0$'\n'* soft nproc 100$'\n'* hard nproc 150$'\n\
 echo "[$i] Adduser / Useradd" 
 $SUDO sed -i 's/DSHELL=.*/DSHELL=\/bin\/false/' /etc/adduser.conf 
 $SUDO sed -i 's/SHELL=.*/SHELL=\/bin\/false/' /etc/default/useradd
-$SUDO sed -i 's/^# INACTIVE=.*/INACTIVE=35' /etc/default/useradd
+$SUDO sed -i 's/^# INACTIVE=.*/INACTIVE=35/' /etc/default/useradd
 ((i++))
 
 echo "[$i] Root access"
@@ -191,7 +191,7 @@ echo "[$i] Aide"
 $SUDO sed -i 's/^Checksums =.*/Checksums = sha512/' /etc/aide/aide.conf
 ((i++)
 
-echo "[$i] rhosts"
+echo "[$i] .rhosts"
 for dir in `egrep -v 'nologin|false' /etc/passwd | awk -F ":" '{print $6}'`;
 do
         find $dir -name "hosts.equiv" -o -name ".rhosts" -exec rm -f {} \;
@@ -201,6 +201,12 @@ do
         fi
 done
 ((i++)
+
+echo "[$i] Remove users"
+for users in games gnats irc news uucp; 
+do 
+	sudo userdel -r $users 2> /dev/null
+done
 
 echo "[$i] Remove suid bits"
 for p in /bin/fusermount /bin/mount /bin/ping /bin/ping6 /bin/su /bin/umount /usr/bin/bsd-write /usr/bin/chage /usr/bin/chfn /usr/bin/chsh /usr/bin/mlocate /usr/bin/mtr /usr/bin/newgrp /usr/bin/pkexec /usr/bin/traceroute6.iputils /usr/bin/wall /usr/sbin/pppd;
