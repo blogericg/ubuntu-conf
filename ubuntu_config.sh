@@ -164,6 +164,7 @@ $SUDO sed -i 's/^exec.*/exec \/usr\/bin\/logger -p security.info \"Ctrl-Alt-Dele
 ((i++))
 
 echo "[$i] Blacklisting kernel modules"
+$SUDO bash -c "echo >> /etc/modprobe.d/blacklist.conf"
 for mod in dccp sctp rds tipc net-pf-31 bluetooth usb-storage;
 do 
 	$SUDO bash -c "echo install $mod /bin/false >> /etc/modprobe.d/blacklist.conf"
@@ -177,6 +178,10 @@ $SUDO sed -i 's/^GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="audit=1"/' /etc/defau
 $SUDO bash -c "curl -3 -s $AUDITD_RULES > /etc/audit/audit.rules"
 $SUDO update-grub 2> /dev/null
 ((i++))
+
+echo "[$i] Aide"
+$SUDO sed -i 's/^Checksums =.*/Checksums = sha512/' /etc/aide/aide.conf
+((i++)
 
 echo "[$i] rhosts"
 for dir in `egrep -v 'nologin|false' /etc/passwd | awk -F ":" '{print $6}'`;
@@ -204,6 +209,12 @@ echo "[$i] Cleaning."
 $SUDO $APT clean
 $SUDO $APT autoclean
 $SUDO apt-get -qq autoremove
+((i++))
+
+echo
+echo "[$i] Running Aide, this will take a while"
+$SUDO aideinit --yes
+$SUDO cp /var/lib/aide/aide.db.new /var/lib/aide/aide.db
 ((i++))
 
 echo
