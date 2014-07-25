@@ -70,13 +70,11 @@ $SUDO sed -i "s/ADMIN=\"127.0.0.1\"/ADMIN=\"$FW_ADMIN\"/" /etc/init.d/firewall
 $SUDO chmod u+x /etc/init.d/firewall
 $SUDO bash -c "/etc/init.d/firewall"
 
-if ! [[ `grep "/tmp" /etc/fstab` ]];
-	then
-		echo "[X] /tmp settings."
-		$SUDO bash -c "echo tmpfs /tmp tmpfs defaults,nosuid,nodev,mode=1777,size=100M 0 0 >> /etc/fstab"
-		$SUDO bash -c "echo /tmp /var/tmp tmpfs defaults,nosuid,nodev,bind,mode=1777,size=100M 0 0 >> /etc/fstab"
-		$SUDO mount -a
-fi
+echo "[X] /etc/fstab"
+$SUDO bash -c "echo tmpfs /tmp tmpfs defaults,nosuid,nodev,mode=1777,size=100M 0 0 >> /etc/fstab"
+$SUDO bash -c "echo /tmp /var/tmp tmpfs defaults,nosuid,nodev,bind,mode=1777,size=100M 0 0 >> /etc/fstab"
+$SUDO sed -i '/floppy/d' /etc/fstab
+$SUDO mount -a
 
 echo "[X] Updating the package index files from their sources."
 $SUDO $APT update
