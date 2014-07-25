@@ -37,10 +37,10 @@ VERBOSE="N" *If you want all the details or not*
 CHANGEME="" *Add something just to verify that you actually glanced the code*    
       
 ##Recommended reading:  
-Red Hat 6 STIG - Version 1 Release 4
-Guide to the Secure Configuration of Red Hat Enterprise Linux 5
-CIS Ubuntu 12.04 LTS Server Benchmark v1.0.0
-https://wiki.ubuntu.com/Security/Features
-https://help.ubuntu.com/community/StricterDefaults   
+Red Hat 6 STIG - Version 1 Release 4    
+Guide to the Secure Configuration of Red Hat Enterprise Linux 5    
+CIS Ubuntu 12.04 LTS Server Benchmark v1.0.0    
+https://wiki.ubuntu.com/Security/Features     
+https://help.ubuntu.com/community/StricterDefaults        
 
 
