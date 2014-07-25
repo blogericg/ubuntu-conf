@@ -33,13 +33,14 @@ FW_CONF="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/net/f
 FW_POLICY="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/net/firewall" *Skeleton firewall configuration*  
 SYSCTL_CONF="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/misc/sysctl.conf " *Stricter sysctl settings*  
 AUDITD_RULES="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/misc/audit.rules" *Auditd rules*    
-VERBOSE="N" *If you want all the details or not *     
-CHANGEME="" *Add something just to verify that you actually glanced the code *    
+VERBOSE="N" *If you want all the details or not*     
+CHANGEME="" *Add something just to verify that you actually glanced the code*    
       
 ##Recommended reading:  
-Guide to the Secure Configuration of Red Hat Enterprise Linux 5   
-CIS Ubuntu 12.04 LTS Server Benchmark v1.0.0     
-https://wiki.ubuntu.com/Security/Features   
+Red Hat 6 STIG - Version 1 Release 4
+Guide to the Secure Configuration of Red Hat Enterprise Linux 5
+CIS Ubuntu 12.04 LTS Server Benchmark v1.0.0
+https://wiki.ubuntu.com/Security/Features
 https://help.ubuntu.com/community/StricterDefaults   
 
 
