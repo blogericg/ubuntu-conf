@@ -63,7 +63,7 @@ if ! [[ "$INPUT" == "$RINPUT" ]];
 		echo "Let it begin."
 fi
 
-$i = "0"
+i="0"
 
 echo "[$i] Installing firewall."
 $SUDO bash -c "curl -3 -s $FW_CONF > /etc/init/firewall.conf"
@@ -177,6 +177,17 @@ $SUDO sed -i 's/^GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="audit=1"/' /etc/defau
 $SUDO bash -c "curl -3 -s $AUDITD_RULES > /etc/audit/audit.rules"
 $SUDO update-grub 2> /dev/null
 ((i++))
+
+echo "[$i] rhosts"
+for dir in `egrep -v 'nologin|false' /etc/passwd | awk -F ":" '{print $6}'`;
+do
+        find $dir -name "hosts.equiv" -o -name ".rhosts" -exec rm -f {} \;
+        if [[ -f /etc/hosts.equiv ]];
+                then
+                rm /etc/hosts.equiv
+        fi
+done
+((i++)
 
 echo "[$i] Remove suid bits"
 for p in /bin/fusermount /bin/mount /bin/ping /bin/ping6 /bin/su /bin/umount /usr/bin/bsd-write /usr/bin/chage /usr/bin/chfn /usr/bin/chsh /usr/bin/mlocate /usr/bin/mtr /usr/bin/newgrp /usr/bin/pkexec /usr/bin/traceroute6.iputils /usr/bin/wall /usr/sbin/pppd;
