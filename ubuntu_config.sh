@@ -140,10 +140,10 @@ if [[ `$SUDO dmidecode -q --type system | grep -i vmware` ]];
 		VM="open-vm-tools"
 fi
 
-$SUDO bash -c "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
-$SUDO bash -c "postfix postfix/mailname string `hostname -f`" | debconf-set-selections
+$SUDO bash -c "echo postfix postfix/main_mailer_type select Internet Site | debconf-set-selections"
+$SUDO bash -c "echo postfix postfix/mailname string `hostname -f` | debconf-set-selections"
 
-$SUDO $APT install aide apparmor-profiles auditd haveged libpam-cracklib libpam-tmpdir ntp openssh-server postfix $VM
+$SUDO $APT install aide-common apparmor-profiles auditd haveged libpam-cracklib libpam-tmpdir ntp openssh-server postfix $VM
 
 echo "[$i] /etc/ssh/sshd_config"
 $SUDO bash -c "echo $'\n'## Groups allowed to connect$'\n'AllowGroups $SSH_GRPS >> /etc/ssh/sshd_config"
@@ -189,7 +189,7 @@ $SUDO update-grub 2> /dev/null
 
 echo "[$i] Aide"
 $SUDO sed -i 's/^Checksums =.*/Checksums = sha512/' /etc/aide/aide.conf
-((i++)
+((i++))
 
 echo "[$i] .rhosts"
 for dir in `egrep -v 'nologin|false' /etc/passwd | awk -F ":" '{print $6}'`;
@@ -200,7 +200,7 @@ do
                 rm /etc/hosts.equiv
         fi
 done
-((i++)
+((i++))
 
 echo "[$i] Remove users"
 for users in games gnats irc news uucp; 
