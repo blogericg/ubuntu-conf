@@ -6,6 +6,7 @@ SSH_GRPS="sudo"
 FW_CONF="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/net/firewall.conf"
 FW_POLICY="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/net/firewall"
 SYSCTL_CONF="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/misc/sysctl.conf"
+AUDITD_RULES="https://raw.githubusercontent.com/konstruktoid/ubuntu-conf/master/misc/audit.rules"
 VERBOSE="N"
 CHANGEME=""		# Add something just to verify that you actually glanced the code
 
@@ -167,6 +168,14 @@ for mod in dccp sctp rds tipc net-pf-31 bluetooth usb-storage;
 do 
 	$SUDO bash -c "echo install $mod /bin/false >> /etc/modprobe.d/blacklist.conf"
 done
+((i++))
+
+echo "[$i] Auditd"
+$SUDO sed -i 's/^space_left_action =.*/space_left_action = email/' /etc/audit/auditd.conf
+$SUDO bash -c "curl -3 -s $AUDITD_RULES > /etc/audit/audit.rules"
+$SUDO sed -i 's/^GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="audit=1"/' /etc/default/grub
+$SUDO bash -c "curl -3 -s $AUDITD_RULES > /etc/audit/audit.rules"
+$SUDO update-grub 2> /dev/null
 ((i++))
 
 echo "[$i] Remove suid bits"
