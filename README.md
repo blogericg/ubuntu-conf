@@ -16,8 +16,8 @@ Partition the system:
 /home (rw,nosuid,nodev)    
 swap    
 /var     
-/var/log (rw,nosuid,nodev)    
-/var/log/audit (rw,nosuid,nodev)   
+/var/log (rw,nosuid,nodev,noexec)    
+/var/log/audit (rw,nosuid,nodev,noexec)   
 
 Note that /tmp and /var/tmp will be added automatically by the script.
 
