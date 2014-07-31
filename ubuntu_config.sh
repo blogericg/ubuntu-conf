@@ -217,6 +217,13 @@ do
 	$SUDO dpkg-statoverride --add $ug $oct $p 2> /dev/null
 	$SUDO chmod -s $p
 done
+
+for SHELL in `cat /etc/shells`; do
+	if [ -x $SHELL ]; then
+		chmod u-s $SHELL
+	fi
+done
+
 ((i++))
 
 echo "[$i] Cleaning."
