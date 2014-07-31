@@ -192,9 +192,9 @@ $SUDO sed -i 's/^Checksums =.*/Checksums = sha512/' /etc/aide/aide.conf
 ((i++))
 
 echo "[$i] .rhosts"
-for dir in `egrep -v 'nologin|false' /etc/passwd | awk -F ":" '{print $6}'`;
+for dir in `cat /etc/passwd | awk -F ":" '{print $6}'`;
 do
-        find $dir -name "hosts.equiv" -o -name ".rhosts" -exec rm -f {} \;
+        find $dir -name "hosts.equiv" -o -name ".rhosts" -exec rm -f {} \; 2> /dev/null
         if [[ -f /etc/hosts.equiv ]];
                 then
                 rm /etc/hosts.equiv
