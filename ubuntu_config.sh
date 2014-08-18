@@ -220,7 +220,7 @@ done
 
 for SHELL in `cat /etc/shells`; do
 	if [ -x $SHELL ]; then
-		chmod u-s $SHELL
+		$SUDO chmod -s $SHELL
 	fi
 done
 
