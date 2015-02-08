@@ -74,8 +74,8 @@ fi
 i="0"
 
 echo "[$i] Installing firewall."
-$SUDO bash -c "curl -3 -s $FW_CONF > /etc/init/firewall.conf"
-$SUDO bash -c "curl -3 -s $FW_POLICY > /etc/init.d/firewall"
+$SUDO bash -c "curl -s $FW_CONF > /etc/init/firewall.conf"
+$SUDO bash -c "curl -s $FW_POLICY > /etc/init.d/firewall"
 $SUDO update-rc.d firewall defaults 2>/dev/null 
 $SUDO sed -i "s/ADMIN=\"127.0.0.1\"/ADMIN=\"$FW_ADMIN\"/" /etc/init.d/firewall
 $SUDO chmod u+x /etc/init.d/firewall
@@ -113,7 +113,7 @@ $SUDO sed -i 's/^# SHA_CRYPT_MAX_ROUNDS.*/SHA_CRYPT_MAX_ROUNDS\t\t10000/' /etc/l
 ((i++))
 
 echo "[$i] /etc/sysctl.conf"
-$SUDO bash -c "curl -3 -s $SYSCTL_CONF > /etc/sysctl.conf"
+$SUDO bash -c "curl -s $SYSCTL_CONF > /etc/sysctl.conf"
 $SUDO service procps start
 ((i++))
 
@@ -181,9 +181,9 @@ done
 
 echo "[$i] Auditd"
 $SUDO sed -i 's/^space_left_action =.*/space_left_action = email/' /etc/audit/auditd.conf
-$SUDO bash -c "curl -3 -s $AUDITD_RULES > /etc/audit/audit.rules"
+$SUDO bash -c "curl -s $AUDITD_RULES > /etc/audit/audit.rules"
 $SUDO sed -i 's/^GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="audit=1"/' /etc/default/grub
-$SUDO bash -c "curl -3 -s $AUDITD_RULES > /etc/audit/audit.rules"
+$SUDO bash -c "curl -s $AUDITD_RULES > /etc/audit/audit.rules"
 $SUDO update-grub 2> /dev/null
 ((i++))
 
