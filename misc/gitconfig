@@ -10,9 +10,9 @@
 	br = branch -a -vv
 	rem = "!sh -c 'for r in `git remote`; do git remote show $r; done'"
 	up = fetch --all -v
-    dico = !sh -c 'git diff `git log -1 --pretty=%h`'
-    pp = !sh -c 'git pull --rebase && git push'
-    ap = add --patch
+	dico = !sh -c 'git diff `git log -1 --pretty=%h`'
+	pp = !sh -c 'git pull --rebase && git push'
+	ap = add --patch
 	
 [push]
 	default = simple
