@@ -1,12 +1,14 @@
 #!/bin/sh
-IPT=/sbin/iptables
-IP6T=/sbin/ip6tables
+IPT=`which iptables`
+IP6T=`which ip6tables`
 ADMIN="127.0.0.1"
 
 echo "Enabling Firewall"
 
-$IPT --flush
-$IP6T --flush
+$IPT -F
+$IPT -X
+$IP6T -F
+$IP6T -X
 
 # IPv4 rules
 
@@ -23,8 +25,8 @@ $IPT -A INPUT -i lo -j ACCEPT
 $IPT -A OUTPUT -o lo -j ACCEPT
 
 for ip in $ADMIN;
-        do
-        $IPT -A INPUT -p tcp --dport 22 -s $ip -j ACCEPT
+  do
+  $IPT -A INPUT -p tcp --dport 22 -s $ip -j ACCEPT
 done
 
 $IPT -A INPUT -j DROP
@@ -42,3 +44,4 @@ $IP6T -A INPUT -i lo -j ACCEPT
 $IP6T -A OUTPUT -o lo -j ACCEPT
 
 $IP6T -A INPUT -j DROP
+
