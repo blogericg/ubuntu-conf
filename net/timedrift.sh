@@ -3,10 +3,10 @@ DRIFTFILE=`grep driftfile /etc/ntp.conf |awk '{print $2}'`
 PPM='0.0864'
 
 if test -r $DRIFTFILE; then
-        DRIFT=`cat $DRIFTFILE`
-        else
-        echo "$DRIFTFILE is not available."
-        exit
+    DRIFT=`cat $DRIFTFILE`
+  else
+    echo "$DRIFTFILE is not available."
+    exit
 fi
 
 S=`echo "$PPM $DRIFT" | awk '{s=$1*$2; {print s}}'`
