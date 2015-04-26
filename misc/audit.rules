@@ -1,7 +1,7 @@
 # /etc/audit/audit.rules for 64-bit systems
 #
-# Based on Red Hat 6 STIG - Version 1 Release 4
-# 
+# Red Hat 6 STIG - Version 1 Release 4
+# CIS Ubuntu 14.04 LTS Server Benchmark
 # konstruktoid.net
 #
 
@@ -14,9 +14,6 @@
 # A reboot is required to change audit rules
 -e 2
 
-# Max 100 audit messages per second
--r 100
-
 -a always,exit -F arch=b64 -S adjtimex -k audit_time_rules
 -a always,exit -F arch=b64 -S chmod -F auid=0 -k perm_mod
 -a always,exit -F arch=b64 -S chmod -F auid>=500 -F auid!=4294967295 -k perm_mod
@@ -24,7 +21,7 @@
 -a always,exit -F arch=b64 -S chown -F auid>=500 -F auid!=4294967295 -k perm_mod
 -a always,exit -F arch=b64 -S clock_settime -k audit_time_rules
 -a always,exit -F arch=b64 -S creat -S open -S openat -S truncate \
--a always,exit -F arch=b64 -S fchmodat -F auid=0 -k perm_mod 
+-a always,exit -F arch=b64 -S fchmodat -F auid=0 -k perm_mod
 -a always,exit -F arch=b64 -S fchmodat -F auid>=500 -F auid!=4294967295 -k perm_mod
 -a always,exit -F arch=b64 -S fchmod -F auid=0 -k perm_mod
 -a always,exit -F arch=b64 -S fchmod -F auid>=500 -F auid!=4294967295 -k perm_mod
@@ -43,7 +40,7 @@
 -a always,exit -F arch=b64 -S lremovexattr -F auid>=500 -F auid!=4294967295 -k perm_mod
 -a always,exit -F arch=b64 -S lsetxattr -F auid=0 -k perm_mod
 -a always,exit -F arch=b64 -S lsetxattr -F auid>=500 -F auid!=4294967295 -k perm_mod
--a always,exit -F arch=b64 -S mount -F auid=0 -k export   
+-a always,exit -F arch=b64 -S mount -F auid=0 -k export
 -a always,exit -F arch=b64 -S mount -F auid>=500 -F auid!=4294967295 -k export
 -a always,exit -F arch=b64 -S removexattr -F auid=0 -k perm_mod
 -a always,exit -F arch=b64 -S removexattr -F auid>=500 -F auid!=4294967295 -k perm_mod
@@ -55,7 +52,7 @@
 -a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete
 -S ftruncate -F exit=-EACCES -F auid=0 -k access
 -S ftruncate -F exit=-EACCES -F auid>=500 -F auid!=4294967295 -k access
--S ftruncate -F exit=-EPERM -F auid=0 -k access 
+-S ftruncate -F exit=-EPERM -F auid=0 -k access
 -S ftruncate -F exit=-EPERM -F auid>=500 -F auid!=4294967295 -k access
 -w /etc/group -p wa -k audit_account_changes
 -w /etc/gshadow -p wa -k audit_account_changes
@@ -65,12 +62,12 @@
 -w /etc/localtime -p wa -k audit_time_rules
 -w /etc/passwd -p wa -k audit_account_changes
 -w /etc/security/opasswd -p wa -k audit_account_changes
--w /etc/security/opasswd -p wa -k audit_account_changes 
--w /etc/security/opasswd -p wa -k audit_account_changes   
--w /etc/selinux/ -p wa -k MAC-policy   
+-w /etc/security/opasswd -p wa -k audit_account_changes
+-w /etc/security/opasswd -p wa -k audit_account_changes
+-w /etc/selinux/ -p wa -k MAC-policy
 -w /etc/shadow -p wa -k audit_account_changes
 -w /etc/sudoers -p wa -k actions
--w /etc/sysconfig/network -p wa -k audit_network_modifications   
+-w /etc/sysconfig/network -p wa -k audit_network_modifications
 -w /sbin/insmod -p x -k modules
 -w /sbin/modprobe -p x -k modules
 -w /sbin/rmmod -p x -k modules
