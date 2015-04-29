@@ -1,6 +1,7 @@
 ubuntu-conf  
 ===========
-  
+**If you're using Ubuntu 15.04 (Vivid Vervet) you should be checking out https://github.com/konstruktoid/hardening instead.**  
+
 ubuntu_config.sh is a script to harden a Ubuntu server.  
 
 It's meant to be run from the console, and directly after a server has been installed.      
