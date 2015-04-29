@@ -1,4 +1,6 @@
-## Based on https://github.com/gds-operations/puppet-auditd/blob/master/templates/audit.rules.begin.fragment.erb
+## Based on:
+## https://github.com/gds-operations/puppet-auditd/blob/master/templates/audit.rules.begin.fragment.erb 
+## RHEL 6 Security Technical Implementation Guide
 
 ## Remove any existing rules
 -D
@@ -9,7 +11,7 @@
 ## Failure Mode
 -f 2
 
-## Audit the audit logs. 
+## Audit the audit logs 
 -w /var/log/audit/ -k auditlog
 
 ## Auditd configuration
@@ -21,21 +23,21 @@
 -w /sbin/auditctl -p x -k audittools
 -w /sbin/auditd -p x -k audittools
 
-## Monitor AppArmor configuration changes.
+## Monitor AppArmor configuration changes
 -w /etc/apparmor/ -p wa -k apparmor
 -w /etc/apparmor.d/ -p wa -k apparmor
 
-## Monitor usage of AppArmor tools.
+## Monitor usage of AppArmor tools
 -w /sbin/apparmor_parser -p x -k apparmor_tools
 -w /usr/sbin/aa-complain -p x -k apparmor_tools
 -w /usr/sbin/aa-disable -p x -k apparmor_tools
 -w /usr/sbin/aa-enforce -p x -k apparmor_tools
 
-## Monitor Systemd configuration changes.
+## Monitor Systemd configuration changes
 -w /etc/systemd/ -p wa -k systemd
 -w /lib/systemd/ -p wa -k systemd
 
-## Monitor usage of systemd tools.
+## Monitor usage of systemd tools
 -w /bin/systemctl -p x -k systemd_tools
 -w /bin/journalctl -p x -k systemd_tools 
 
@@ -77,6 +79,11 @@
 -w /usr/sbin/usermod -p x -k user_modification
 -w /usr/sbin/adduser -p x -k user_modification
 
+## Monitor module tools
+-w /sbin/insmod -p x -k modules
+-w /sbin/rmmod -p x -k modules
+-w /sbin/modprobe -p x -k modules
+
 ## Login configuration and information
 -w /etc/login.defs -p wa -k login
 -w /etc/securetty -p wa -k login
@@ -99,7 +106,7 @@
 ## Local time zone
 -w /etc/localtime -p wa -k localtime
 
-## Time zone configuration.
+## Time zone configuration
 -w /etc/timezone -p wa -k timezone
 
 ## Kernel parameters
