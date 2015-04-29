@@ -165,4 +165,4 @@
 -w /var/tmp/ -p wxa -k tmp
 
 ## Make the configuration immutable
-#-e 2
+-e 2
