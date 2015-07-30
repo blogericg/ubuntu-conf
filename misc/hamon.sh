@@ -1,25 +1,27 @@
-#!/bin/bash
+#!/bin/sh
 PROCESS="/usr/sbin/mysqld"
-FQDN=`hostname --fqdn`
+FQDN=$(hostname --fqdn)
 RCPT="root"
 
 if [ -z "$(pidof $PROCESS)" ]
   then
-  MAIL=`mktemp`
+  MAIL=$(mktemp)
 
-  echo "$PROCESS not running on $FQDN." > $MAIL
-  echo "Initiating Heartbeat Standby and service restart." >> $MAIL
-  echo >> $MAIL
+  {
+    echo "$PROCESS not running on $FQDN."
+    echo "Initiating Heartbeat Standby and service restart."
+    echo
+  } >> "$MAIL"
 
-  tail -n5 /var/log/mysql/error.log /var/log/mysql.err /var/log/mysql.log >> $MAIL
+  tail -n5 /var/log/mysql/error.log /var/log/mysql.err /var/log/mysql.log >> "$MAIL"
 
-  /usr/share/heartbeat/hb_standby all &> /dev/null
-  service mysql restart &> /dev/null
+  /usr/share/heartbeat/hb_standby all >/dev/null 2>&1
+  service mysql restart >/dev/null 2>&1
 
-  echo >> $MAIL
-  tail -n10 /var/log/heartbeat-debug >> $MAIL
+  echo >> "$MAIL"
+  tail -n10 /var/log/heartbeat-debug >> "$MAIL"
 
-  cat $MAIL | mail -s "$PROCESS not running on $FQDN." $RCPT
+  mail -s "$PROCESS not running on $FQDN." "$RCPT" < "$MAIL"
 
-  rm $MAIL
+  rm "$MAIL"
 fi
