@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function timesyncd {
   echo "Configuring systemd-timesyncd"
 
