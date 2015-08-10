@@ -10,7 +10,7 @@ if test -r "$DRIFTFILE"; then
 fi
 
 S=$(echo "$PPM $DRIFT" | awk '{s=$1*$2; {print s}}')
-PEER=$(ntpq -n -c lpeers | grep "*" |awk '{print $1}' | tr -d "*")
-NPEER=$(nslookup "$PEER" | grep "name = " | awk '{print $4}')
+PEER=$(ntpq -n -c lpeers | grep '[*]' |awk '{print $1}' | tr -d '*')
+NPEER=$(nslookup "$PEER" | grep 'name = ' | awk '{print $4}')
 
 echo "$(hostname -f) is off by about $S seconds per day relative to sys.peer $PEER ($NPEER)"
