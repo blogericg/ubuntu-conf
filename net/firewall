@@ -1,6 +1,6 @@
 #!/bin/sh
-IPT=`which iptables`
-IP6T=`which ip6tables`
+IPT=$(which iptables)
+IP6T=$(which ip6tables)
 ADMIN="127.0.0.1"
 
 echo "Enabling Firewall"
