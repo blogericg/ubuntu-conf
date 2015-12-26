@@ -1,5 +1,4 @@
 #!/bin/bash
-# konstruktoid.net
 #
 # Documentation: 
 # Red Hat 6 STIG - Version 1 Release 4
